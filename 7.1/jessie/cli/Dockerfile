@@ -1,4 +1,10 @@
-FROM debian:%%DEBIAN_SUITE%%
+#
+# NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
+#
+# PLEASE DO NOT EDIT IT DIRECTLY.
+#
+
+FROM debian:jessie
 
 # prevent Debian's PHP packages from being installed
 # https://github.com/docker-library/php/pull/542
@@ -43,11 +49,11 @@ ENV PHP_CFLAGS="-fstack-protector-strong -fpic -fpie -O2"
 ENV PHP_CPPFLAGS="$PHP_CFLAGS"
 ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
-ENV GPG_KEYS %%GPG_KEYS%%
+ENV GPG_KEYS A917B1ECDA84AEC2B568FED6F50ABC807BD5DCD0 528995BFEDFBA7191D46839EF9BA0ADA31CBD89E 1729F83938DA44E27BA0F4D3DBDB397470D12172
 
-ENV PHP_VERSION %%PHP_VERSION%%
-ENV PHP_URL="%%PHP_URL%%" PHP_ASC_URL="%%PHP_ASC_URL%%"
-ENV PHP_SHA256="%%PHP_SHA256%%" PHP_MD5="%%PHP_MD5%%"
+ENV PHP_VERSION 7.1.13
+ENV PHP_URL="https://secure.php.net/get/php-7.1.13.tar.xz/from/this/mirror" PHP_ASC_URL="https://secure.php.net/get/php-7.1.13.tar.xz.asc/from/this/mirror"
+ENV PHP_SHA256="1a0b3f2fb61959b57a3ee01793a77ed3f19bde5aa90c43dcacc85ea32f64fc10" PHP_MD5=""
 
 RUN set -xe; \
 	\
@@ -95,7 +101,6 @@ RUN set -eux; \
 	savedAptMark="$(apt-mark showmanual)"; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
-		libargon2-0-dev \
 		libcurl4-openssl-dev \
 		libedit-dev \
 		libsqlite3-dev \
@@ -132,8 +137,6 @@ RUN set -eux; \
 		--enable-mbstring \
 # --enable-mysqlnd is included here because it's harder to compile after the fact than extensions are (since it's a plugin for several extensions, not an extension in itself)
 		--enable-mysqlnd \
-# https://wiki.php.net/rfc/argon2_password_hash (7.2+)
-		--with-password-argon2 \
 		\
 		--with-curl \
 		--with-libedit \
